@@ -1,0 +1,62 @@
+name: Update Directory Tree
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: write   # 让 GITHUB_TOKEN 有写权限
+
+jobs:
+  update_tree:
+    name: Update Directory Tree View in README.md
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ 把代码拉下来，并保留写权限
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      # 2️⃣ 安装 tree（Ubuntu 22.04 已自带，保险起见）
+      - name: Install tree
+        run: sudo apt-get update && sudo apt-get install -y tree
+
+      # 3️⃣ 生成目录树并写进 README
+      - name: Generate Directory Tree View
+        run: |
+          # 用 tree 生成，-I 忽略 .git 等
+          tree -a -I '.git|.github|__pycache__|*.pyc' -n --dirsfirst > /tmp/tree.txt
+          # 把 <!-- TREEVIEW START --> 与 <!-- TREEVIEW END --> 之间的内容替换掉
+          awk '
+            BEGIN { p=1 }
+            /<!-- TREEVIEW START -->/ { print; p=0; system("cat /tmp/tree.txt"); next }
+            /<!-- TREEVIEW END -->/   { print; p=1; next }
+            p
+          ' README.md > README.tmp && mv README.tmp README.md
+
+      # 4️⃣ 检测 README 是否真有改动
+      - name: Check for Changes
+        id: git_diff
+        run: |
+          if git diff --quiet README.md; then
+            echo "README.md is up-to-date."
+            echo "changes=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "README.md needs updating."
+            echo "changes=true"  >> "$GITHUB_OUTPUT"
+          fi
+
+      # 5️⃣ 如果有改动就提交并推回仓库
+      - name: Commit and Push Changes
+        if: steps.git_diff.outputs.changes == 'true'
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git commit -m "chore: auto-update directory tree in README.md"
+          git push origin main
