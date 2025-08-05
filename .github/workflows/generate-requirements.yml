@@ -1,13 +1,33 @@
-- name: Setup SSH key
-  uses: webfactory/ssh-agent@v0.9.0
-  with:
-    ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+name: Auto‑Generate requirements.txt
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
-- name: Push changes
-  run: |
-    git config --local user.email "actions@github.com"
-    git config --local user.name "GitHub Actions"
-    git remote set-url origin git@github.com:${{ github.repository }}.git
-    git add requirements.txt
-    git commit -m "Auto-generated requirements.txt" || echo "No changes"
-    git push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+          cache: 'pip'  # enables dependency caching :contentReference[oaicite:1]{index=1}
+
+      - name: Generate requirements.txt via pipreqs-action
+        uses: ryan-rozario/pipreqs-action@v3.0.0
+        with:
+          PROJECT_PATH: '.'                   # path containing your .py files
+          REQUIREMENT_PATH: './requirements.txt'
+          # PROJECT_NAME: 'MyProject'        # optional commit message context :contentReference[oaicite:2]{index=2}
+
+      - name: Commit and push requirements.txt
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "actions@users.noreply.github.com"
+          git add requirements.txt
+          git diff --quiet && echo "No changes in requirements.txt" || git commit -m "Auto‑update requirements.txt"
+          git push
