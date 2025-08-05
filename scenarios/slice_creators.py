@@ -14,7 +14,7 @@ def create_slice_set(n_slices, network_radius):
     bandwidths = np.array([0.1, 0.5, 1])
     tilde_R_ls = np.array([0.1, 0.2])
     tilde_R_us = np.array([0.2, 0.4])
-    num_UEs = np.array([1])
+    num_UEs = np.array([10])
     for i in range(n_slices):
         n_UEs = np.random.choice(num_UEs)
         b_width = np.random.choice(bandwidths)

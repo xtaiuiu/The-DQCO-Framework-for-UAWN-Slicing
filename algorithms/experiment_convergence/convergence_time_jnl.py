@@ -14,7 +14,7 @@ from algorithms.main_algorithms.block_descent_nonsmooth.subproblem_p import opti
     optimize_p_cvx_with_lb
 from algorithms.main_algorithms.block_descent_nonsmooth.subproblem_x import optimize_x_kkt_with_lb, \
     optimize_x_cvx_with_lb
-from algorithms.main_algorithms.quasi_subgradient_no_QoS_dynamic import qusi_subgradient_no_QoS_dynamic
+from algorithms.main_algorithms.run_simulations import qusi_subgradient_no_QoS_dynamic
 from scenarios.scenario_creators import create_scenario
 
 

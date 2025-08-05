@@ -5,7 +5,7 @@ import numpy as np
 from algorithms.main_algorithms.block_descent_nonsmooth.subproblem_p import optimize_p_kkt_with_lb
 from algorithms.main_algorithms.block_descent_nonsmooth.subproblem_x import optimize_x_kkt_with_lb
 from algorithms.main_algorithms.mip_bcd import optimize_x_continuous_kkt, optimize_p_kkt, optimize_p
-from algorithms.main_algorithms.quasi_subgradient_no_QoS_dynamic import qusi_subgradient_no_QoS_dynamic
+from algorithms.main_algorithms.run_simulations import qusi_subgradient_no_QoS_dynamic
 from algorithms.main_algorithms.relax_quasi_subgradient import function
 from scenarios.scenario_creators import load_scenario, create_scenario
 import logging

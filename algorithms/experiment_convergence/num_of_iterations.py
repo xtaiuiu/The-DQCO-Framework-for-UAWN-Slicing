@@ -10,7 +10,7 @@ from pandas import DataFrame
 
 from algorithms.experiment_comparison.problem_generator import NsProblem
 from algorithms.main_algorithms.block_descent_nonsmooth.block_descent_max_min_rate import block_coordinate_descent
-from algorithms.main_algorithms.quasi_subgradient_no_QoS_dynamic import qusi_subgradient_no_QoS_dynamic
+from algorithms.main_algorithms.run_simulations import qusi_subgradient_no_QoS_dynamic
 from scenarios.scenario_creators import create_scenario
 from utils.projction import proj_generalized_simplex_QP, proj_generalized_simplex
 

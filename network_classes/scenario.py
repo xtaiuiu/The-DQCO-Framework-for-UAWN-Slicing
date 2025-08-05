@@ -1,6 +1,8 @@
 import math
 
 import numpy as np
+from matplotlib import pyplot as plt
+from matplotlib.cm import get_cmap
 
 from network_classes.Variables import Variables
 
@@ -142,3 +144,28 @@ class Scenario:
                         pn.sigma * (theta_h ** 2) * (ue.loc_x ** 2 + ue.loc_y ** 2 + uav.h) ** (pn.alpha / 2))
                 lb_p.append((np.exp(slice.r_sla / slice.b_width) - 1) / nu)
         return np.array(lb_x), np.array(lb_p)
+
+    def plot_scenario(self):
+        network_radius = self.pn.radius
+
+        circle = plt.Circle((0, 0), self.pn.radius, fill=False)
+        fig, ax = plt.subplots()
+
+        # plot the circle representing the UAWN
+        ax.add_patch(circle)
+        plt.xlim(-network_radius - 1, network_radius + 1)
+        plt.ylim(-network_radius - 1, network_radius + 1)
+
+        # plot UEs for each slice
+        cmap = get_cmap('tab20')
+        for i in range(len(self.slices)):
+            plt.scatter([p.loc_x for p in self.slices[i].UEs], [p.loc_y for p in self.slices[i].UEs],
+                        color=cmap(i % 20), label=f'UE of slice {i}')
+        ax.legend()
+        plt.axis('equal')
+        plt.xlabel('x (meter)')
+        plt.ylabel('y (meter)')
+        plt.title('User distribution')
+
+        plt.show()
+        return fig

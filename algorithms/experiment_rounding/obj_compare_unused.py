@@ -1,6 +1,6 @@
 import numpy as np
 
-from algorithms.main_algorithms.quasi_subgradient_no_QoS_dynamic import qusi_subgradient_no_QoS_dynamic, \
+from algorithms.main_algorithms.run_simulations import qusi_subgradient_no_QoS_dynamic, \
     rounded_solution
 from algorithms.main_algorithms.rounding.rounding_algorithms import rounding_by_worst_condition
 from scenarios.scenario_creators import create_scenario, load_scenario

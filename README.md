@@ -9,20 +9,6 @@ Quasiconvex Decomposition Framework"**
 *(Submitted to IEEE INFOCOM, 2026)*
 
 ## 📜 Repository Structure
-```bash
-.
-├── core/                  # Core algorithm implementations
-│   ├── dqco_engine.py     # Main optimization engine
-│   └── slicing_model.py   # Network slicing models
-├── data/                  # Input datasets/configs
-│   ├── uav_positions.json
-│   └── traffic_profiles.h5
-├── scripts/               # Execution scripts
-│   ├── run_simulation.py  # Main simulation script
-│   └── visualize.py       # Result visualization
-├── results/               # Output figures/data (auto-generated)
-├── requirements.txt       # Python dependencies
-```
 
 <!-- TREEVIEW START -->
 ```bash
@@ -49,32 +35,43 @@ Quasiconvex Decomposition Framework"**
 ## 🚀 Quick Start
 ### Installation
 ```bash
-pip install -r requirements.txt
+pip install -e .
 ```
 
 ### Run Simulation
 
-#### 1. Create a simulated UAWN
+To run the simulation, just run the following cmd:
+```bash
+python algorithms/main_algorithms/run_simulations.py
+```
+This will perform the following tasks:
+#### 1). Create a simulated UAWN
+A default UAV-aided Wireless Network (UAWN) is created for simulation, which contains 4 network slices, each of which has 10 UEs.
 
-#### 2. Solve the UAV Slicing Problem (USP) by using the DQCO framework
+![The simulated UAWN](algorithms/main_algorithms/Simulated_UAWN.png)
 
+#### 2). Solve the UAV Slicing Problem (USP) by using the DQCO framework
 
-#### 3. Plot the Convergence Curve
+Solve the problem by using quasi-subgradient projection algorithm (QPA), where in the projection
+is performed by using the Proj-KKT algorithm.
+
+Note that the ORA is not performed in run_simulations.
+
+To see the realization of Algorithm 1~3, please refer to the following codes.
 
 ```bash
-python scripts/run_simulation.py \
-    --config data/config.yaml \
-    --output results/simulation_1
+├── algorithms
+├── main_algorithms
+├── ├── run_simulations.py              # QPA algorithm   
+│   ├── projection.py                   # Proj-KKT algorithm
+│   │   ├── rounding/
+│   │       └── rounding_algorithms.py  # ORA rounding
 ```
 
-### Reproduce Paper Figures
+#### 3). Plot the Convergence Curve
+Finally, the script will show the best function value, as well as the convergence curve of QPA.
 
-##### Simulation requires time. To see the simulated figures, run the following codes.
-
-```python
-from scripts.visualize import plot_throughput_comparison
-plot_throughput_comparison("results/exp1/metrics.csv")
-```
+![The simulated UAWN](algorithms/main_algorithms/Convergence_curve.png)
 
 
 ## 🤝 Contributing

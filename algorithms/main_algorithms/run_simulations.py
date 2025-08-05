@@ -83,7 +83,7 @@ def qusi_subgradient_no_QoS_dynamic(sc, projector=proj_generalized_simplex_lb, a
         else:
             print(f"f(k+1) <= f(k)")
             delta_k = theta * delta_k
-        n_plots = 1000
+        n_plots = 100
         # if np.linalg.norm(g)**2 >= 10000:
         #     print("start debug")
         if not k % n_plots:
@@ -96,17 +96,17 @@ def qusi_subgradient_no_QoS_dynamic(sc, projector=proj_generalized_simplex_lb, a
                 plt.plot(range(int(k / n_plots) + 1), function_values, 'b-', label='Function Value')
                 plt.draw()
                 plt.pause(0.05)
-        if abs((function(sc) - f_k) / f_k) < 0.001 and k > 100:
+        if abs((function(sc) - f_k) / f_k) < 0.01 and k > 100:
             df = pd.DataFrame(function_values)
             df.to_excel('convergence_function_values.xlsx')
             break
     if plot:
         plt.ioff()
         plt.show()
-    logging.info(f"B_array = {B_array}, u = {u}, b_tot = {pn.b_tot}")
+    # logging.info(f"B_array = {B_array}, u = {u}, b_tot = {pn.b_tot}")
     # x_int = rounding_by_proj_QP(B_array, u[:n], pn.b_tot)
     # p_int = rounding_by_proj_QP(np.ones(n), u[n:2*n], pn.p_max)
-    return -function(sc), u, function_values
+    return -function(sc), u, np.array(function_values)
 
 
 def rounded_solution(sc, u, method=rounding_by_opt_condition):
@@ -195,27 +195,29 @@ def qusi_subgradient_no_QoS_fixed_stepsize(sc, plot=True):
 
 
 if __name__ == '__main__':
-    from pyinstrument import Profiler
     import time
-
-    profiler = Profiler()
-    profiler.start()
-    np.random.seed(0)
+    np.random.seed(1)
     np.set_printoptions(formatter={'float': '{:0.4f}'.format})
-    sc = create_scenario(10, 10)
+    sc = create_scenario(4, 10)
+    fig_sc = sc.plot_scenario()
+    fig_sc.savefig("Simulated_UAWN.png")
     sc.pn.b_tot = 1000
     sc.pn.p_max = 1000
-    sc = load_scenario('scenario_2_slices.pickle')
+    # sc = load_scenario('scenario_2_slices.pickle')
     h = max((max(0, np.sqrt(sc.uav.h_bar) - sc.uav.c * sc.pn.t_s)) ** 2, sc.pn.h_min ** 2)
     sc.set_h(h)
     sc.set_theta(h)
     #opt_var, opt_fval = qusi_subgradient_no_QoS_dynamic(sc, plot=True)
-    start_time = time.perf_counter()  # 记录开始时间
+    start_time = time.perf_counter()
 
-    opt_var, opt_fval, _ = qusi_subgradient_no_QoS_dynamic(sc, projector=proj_generalized_simplex_QP, plot=True)
-    end_time = time.perf_counter()  # 记录结束时间
-    runtime = end_time - start_time  # 计算运行时间
-    print(f"Runtime: {runtime} seconds")
-    print(f"opt_var = {opt_var}, opt_fval = {-opt_fval}, n_UEs = {len(opt_var)}")
-    profiler.stop()
-    profiler.print()
+    opt_var, u, opt_fval = qusi_subgradient_no_QoS_dynamic(sc, plot=False)
+    end_time = time.perf_counter()
+    runtime = end_time - start_time
+    print(f"optimal objective value = {opt_var}")
+    plt.plot(-opt_fval)
+    plt.xlabel(r'Number of Iterations ($\times 10^{2}$)')
+    plt.ylabel('Objective Function Value')
+    plt.title('Iteration Curve of QPA')
+    plt.savefig("Convergence_curve.png")
+    plt.show()
+
