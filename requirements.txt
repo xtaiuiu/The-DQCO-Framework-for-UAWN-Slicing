@@ -1,0 +1,7 @@
+numpy~=1.26.4
+matplotlib~=3.9.1
+cvxpy~=1.5.2
+mealpy~=3.0.1
+scipy~=1.12.0
+pandas~=2.2.2
+seaborn~=0.13.2
