@@ -8,29 +8,6 @@ This repository contains the simulation code for the paper:
 Quasiconvex Decomposition Framework"**  
 *(Submitted to IEEE INFOCOM, 2026)*
 
-## 📜 Repository Structure
-
-<!-- TREEVIEW START -->
-```bash
-├── algorithms/
-│   ├── experiment_comparison/
-│   ├── experiment_convergence/
-│   │   ├── pso_iterations/
-│   │   └── shio_iterations/
-│   ├── experiment_rounding/
-│   └── main_algorithms/
-│       ├── block_descent_nonsmooth/
-│       ├── rounding/
-├── matlab_code/
-├── network_classes/
-├── scenarios/
-├── test/
-│   ├── bcd_max_min_test/
-│   └── rounding_test/
-└── utils/
-```
-
-<!-- TREEVIEW END -->
 
 ## 🚀 Quick Start
 ### Installation
