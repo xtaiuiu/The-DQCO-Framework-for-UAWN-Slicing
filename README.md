@@ -1,7 +1,7 @@
 # The DQCO Framework for UAWN Slicing - Simulation Code
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)](https://www.python.org/)
+[![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-blue)](https://www.python.org/)
 
 This repository contains the simulation code for the paper:  
 **"Fast Slicing for UAV-Aided Wireless Networks: A

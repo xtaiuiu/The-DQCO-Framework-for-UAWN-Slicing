@@ -98,7 +98,7 @@ def qusi_subgradient_no_QoS_dynamic(sc, projector=proj_generalized_simplex_lb, a
                 plt.pause(0.05)
         if abs((function(sc) - f_k) / f_k) < 0.01 and k > 100:
             df = pd.DataFrame(function_values)
-            df.to_excel('convergence_function_values.xlsx')
+            # df.to_excel('convergence_function_values.xlsx')
             break
     if plot:
         plt.ioff()
